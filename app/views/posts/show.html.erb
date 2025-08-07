@@ -16,7 +16,7 @@
 
   <div class="flex gap-2 mb-6">
     <%= link_to "Editar", edit_post_path(@post), class: "bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow" %>
-    <%= link_to "Eliminar", @post, method: :delete, data: { confirm: "¿Estás seguro?" }, class: "bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow" %>
+   <%= button_to "Eliminar", @post, method: :delete, data: { confirm: "¿Seguro?" }, class: "bg-red-600 text-white px-4 py-2 rounded" %>
     <%= link_to "Volver", posts_path, class: "bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow" %>
   </div>
 

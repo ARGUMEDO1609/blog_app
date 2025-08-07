@@ -46,7 +46,7 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy!
-    redirect_to posts_path, status: :see_other, notice: "Publicación eliminada."
+    redirect_to posts_path, notice: "Post eliminado correctamente."
   end
 
   private

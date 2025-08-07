@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   root "posts#index"
 
   resources :posts do
@@ -13,6 +14,6 @@ Rails.application.routes.draw do
   end
 
   resources :reactions, only: [:create]
-
+    resources :notifications, only: [:index, :update]
   devise_for :users
 end

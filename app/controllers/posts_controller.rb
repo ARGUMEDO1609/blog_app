@@ -60,4 +60,16 @@ end
       @post.tags = tags.map { |name| Tag.find_or_create_by(name: name.downcase) }
     end
 
+    def search
+  query = params[:q].to_s.strip.downcase
+
+  @posts = Post.joins("LEFT JOIN taggings ON taggings.post_id = posts.id")
+               .joins("LEFT JOIN tags ON tags.id = taggings.tag_id")
+               .where("LOWER(posts.title) LIKE ? OR LOWER(tags.name) LIKE ?", "%#{query}%", "%#{query}%")
+               .distinct
+
+  render :index
+end
+
+
 end

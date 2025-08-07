@@ -20,32 +20,25 @@ class PostsController < ApplicationController
   end
 
   # POST /posts or /posts.json
-  def create
-    @post = Post.new(post_params)
-
-    respond_to do |format|
-      if @post.save
-        format.html { redirect_to @post, notice: "Post was successfully created." }
-        format.json { render :show, status: :created, location: @post }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
-    end
+def create
+  @post = current_user.posts.build(post_params.except(:tag_list))
+  if @post.save
+    save_tags
+    redirect_to @post, notice: "Publicación creada."
+  else
+    render :new
   end
+end
 
-  # PATCH/PUT /posts/1 or /posts/1.json
-  def update
-    respond_to do |format|
-      if @post.update(post_params)
-        format.html { redirect_to @post, notice: "Post was successfully updated." }
-        format.json { render :show, status: :ok, location: @post }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
-    end
+def update
+  if @post.update(post_params.except(:tag_list))
+    save_tags
+    redirect_to @post, notice: "Publicación actualizada."
+  else
+    render :edit
   end
+end
+
 
   # DELETE /posts/1 or /posts/1.json
   def destroy
@@ -58,13 +51,13 @@ class PostsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
     def post_params
       params.require(:post).permit(:title, :body, :user_id)
     end
+
+    def save_tags
+      tags = params[:tag_list].split(',').map(&:strip).reject(&:blank?)
+      @post.tags = tags.map { |name| Tag.find_or_create_by(name: name.downcase) }
+    end
+
 end

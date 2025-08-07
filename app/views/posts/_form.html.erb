@@ -1,20 +1,32 @@
-<%= form_with(model: post, local: true) do |form| %>
-  <div class="mb-4">
-    <%= form.label :title, class: "block font-bold mb-1" %>
-    <%= form.text_field :title, class: "w-full border p-2 rounded" %>
+<%= form_with(model: post, local: true, class: "space-y-4") do |f| %>
+  <% if post.errors.any? %>
+    <div class="bg-red-100 text-red-800 p-4 rounded">
+      <h2 class="font-semibold mb-2">Errores:</h2>
+      <ul class="list-disc list-inside">
+        <% post.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :title, "Título", class: "block font-semibold mb-1" %>
+    <%= f.text_field :title, class: "w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-200" %>
   </div>
 
-  <div class="mb-4">
-    <%= form.label :body, class: "block font-bold mb-1" %>
-    <%= form.text_area :body, class: "w-full border p-2 rounded" %>
+  <div>
+    <%= f.label :body, "Contenido", class: "block font-semibold mb-1" %>
+    <%= f.text_area :body, rows: 8, class: "w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-200" %>
   </div>
 
-  <div class="mb-4">
-    <%= label_tag :tag_list, "Etiquetas (separadas por coma)", class: "block font-bold mb-1" %>
-    <%= text_field_tag :tag_list, post.tags.pluck(:name).join(", "), class: "w-full border p-2 rounded" %>
+  <div>
+    <%= label_tag :tag_list, "Etiquetas (separadas por coma)", class: "block font-semibold mb-1" %>
+    <%= text_field_tag :tag_list, post.tags.map(&:name).join(", "), class: "w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-200" %>
   </div>
 
-  <div class="mt-4">
-    <%= form.submit class: "bg-blue-600 text-white px-4 py-2 rounded" %>
+  <div>
+    <%= f.submit class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow" %>
+    <%= link_to "Cancelar", posts_path, class: "ml-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow" %>
   </div>
 <% end %>

@@ -1,75 +1,66 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_post, only: %i[ show edit update destroy ]
 
-  # GET /posts or /posts.json
   def index
     @posts = Post.all
   end
 
-  # GET /posts/1 or /posts/1.json
-  def show
+  def search
+    query = params[:q].to_s.strip.downcase
+
+    @posts = Post.joins("LEFT JOIN taggings ON taggings.post_id = posts.id")
+                 .joins("LEFT JOIN tags ON tags.id = taggings.tag_id")
+                 .where("LOWER(posts.title) LIKE ? OR LOWER(tags.name) LIKE ?", "%#{query}%", "%#{query}%")
+                 .distinct
+
+    render :index
   end
 
-  # GET /posts/new
+  def show; end
+
   def new
     @post = Post.new
   end
 
-  # GET /posts/1/edit
-  def edit
+  def edit; end
+
+  def create
+    @post = current_user.posts.build(post_params.except(:tag_list))
+    if @post.save
+      save_tags
+      redirect_to @post, notice: "Publicación creada."
+    else
+      render :new
+    end
   end
 
-  # POST /posts or /posts.json
-def create
-  @post = current_user.posts.build(post_params.except(:tag_list))
-  if @post.save
-    save_tags
-    redirect_to @post, notice: "Publicación creada."
-  else
-    render :new
+  def update
+    if @post.update(post_params.except(:tag_list))
+      save_tags
+      redirect_to @post, notice: "Publicación actualizada."
+    else
+      render :edit
+    end
   end
-end
 
-def update
-  if @post.update(post_params.except(:tag_list))
-    save_tags
-    redirect_to @post, notice: "Publicación actualizada."
-  else
-    render :edit
-  end
-end
-
-
-  # DELETE /posts/1 or /posts/1.json
   def destroy
     @post.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to posts_path, status: :see_other, notice: "Post was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to posts_path, status: :see_other, notice: "Publicación eliminada."
   end
 
   private
-    def post_params
-      params.require(:post).permit(:title, :body, :user_id)
-    end
 
-    def save_tags
-      tags = params[:tag_list].split(',').map(&:strip).reject(&:blank?)
-      @post.tags = tags.map { |name| Tag.find_or_create_by(name: name.downcase) }
-    end
+  def set_post
+    @post = Post.find(params[:id])
+  end
 
-    def search
-  query = params[:q].to_s.strip.downcase
+  def post_params
+    params.require(:post).permit(:title, :body, :user_id)
+  end
 
-  @posts = Post.joins("LEFT JOIN taggings ON taggings.post_id = posts.id")
-               .joins("LEFT JOIN tags ON tags.id = taggings.tag_id")
-               .where("LOWER(posts.title) LIKE ? OR LOWER(tags.name) LIKE ?", "%#{query}%", "%#{query}%")
-               .distinct
-
-  render :index
-end
-
-
+  def save_tags
+    tags = params[:tag_list].to_s.split(',').map(&:strip).reject(&:blank?)
+    @post.tags = tags.map { |name| Tag.find_or_create_by(name: name.downcase) }
+  end
 end

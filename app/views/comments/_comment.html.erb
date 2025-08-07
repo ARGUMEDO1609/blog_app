@@ -1,10 +1,13 @@
 <%= turbo_frame_tag dom_id(comment) do %>
   <div class="ml-4 my-2 border-l-4 border-gray-200 pl-4">
     <p><strong><%= comment.user.email %>:</strong> <%= comment.body %></p>
-    
+
     <%= render partial: "reactions/controls", locals: { reactable: comment } %>
 
-    <%= render partial: "comments/form", locals: { commentable: comment } %>
+    <%# solo permitir responder al primer nivel, no más profundo %>
+    <% if comment.commentable_type == "Post" %>
+      <%= render partial: "comments/form", locals: { commentable: comment } %>
+    <% end %>
 
     <div id="comments_<%= dom_id(comment) %>">
       <%= render partial: "comments/comment", collection: comment.comments, as: :comment %>

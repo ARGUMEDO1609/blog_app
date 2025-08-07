@@ -20,21 +20,21 @@
 
   <body>
     <nav class="p-4 bg-gray-800 text-white flex justify-between">
-  <div>
-    <%= link_to "BlogApp", root_path, class: "font-bold" %>
-  </div>
-  <div>
-    <% if user_signed_in? %>
-      <%= link_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "ml-4" %>
-    <% else %>
-      <%= link_to "Iniciar sesión", new_user_session_path, class: "ml-4" %>
-      <%= link_to "Registrarse", new_user_registration_path, class: "ml-4" %>
-    <% end %>
-  </div>
-</nav>
-<%= yield %>
+      <div>
+        <%= link_to "BLOG DE PREGUNTAS", root_path, class: "font-bold" %>
+      </div>
+      <div>
+        <% if user_signed_in? %>
+      <%= button_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "ml-4 bg-red-500 text-white px-4 py-2 rounded" %>
 
-    <main class="container mx-auto mt-28 px-5 flex">
+        <% else %>
+          <%= link_to "Iniciar sesión", new_user_session_path, class: "ml-4" %>
+          <%= link_to "Registrarse", new_user_registration_path, class: "ml-4" %>
+        <% end %>
+      </div>
+    </nav>
+
+    <main class="container mx-auto mt-8 px-5">
       <%= yield %>
     </main>
   </body>

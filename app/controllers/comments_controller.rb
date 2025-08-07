@@ -1,27 +1,31 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
 
-# app/controllers/comments_controller.rb
+
 def create
   @commentable = find_commentable
-  @comment = @commentable.comments.build(comment_params)
-  @comment.user = current_user
+  @comment = @commentable.comments.build(comment_params.merge(user: current_user))
 
   if @comment.save
-    # Crear notificación si se comenta una publicación ajena
-    if @commentable.is_a?(Post) && @commentable.user != current_user
+  
+    recipient = @commentable.user
+    if recipient != current_user
       Notification.create!(
-        user: @commentable.user,
-        notifiable: @comment,
-        message: "#{current_user.email} comentó tu publicación."
+        user: recipient,
+        message: "#{current_user.email} comentó tu #{ @commentable.is_a?(Post) ? 'publicación' : 'comentario' }",
+        read: false
       )
     end
 
-    redirect_to @commentable, notice: "Comentario creado."
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_back fallback_location: root_path }
+    end
   else
-    render partial: "comments/form", locals: { commentable: @commentable }
+    render :new
   end
 end
+
 
 
   private

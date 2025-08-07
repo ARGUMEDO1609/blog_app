@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "comment_form_#{dom_id(commentable)}" do %>
+  <%= form_with(model: [commentable, Comment.new], local: false) do |f| %>
+    <div class="mb-2">
+      <%= f.text_area :body, class: "w-full border p-2 rounded", placeholder: "Escribe un comentario..." %>
+    </div>
+    <%= f.submit "Comentar", class: "bg-blue-500 text-white px-3 py-1 rounded" %>
+  <% end %>
+<% end %>

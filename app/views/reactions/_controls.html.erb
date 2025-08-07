@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "reactions_#{dom_id(reactable)}" do %>
+  <% %w[like love laugh].each do |kind| %>
+    <%= button_to reactions_path(kind: kind, reactable_type: reactable.class.name, reactable_id: reactable.id),
+                 method: :post,
+                 class: "inline-block bg-gray-100 px-2 py-1 rounded text-sm mr-2" do %>
+      <%= kind.capitalize %> (<%= reactable.reactions.where(kind: kind).count %>)
+    <% end %>
+  <% end %>
+<% end %>

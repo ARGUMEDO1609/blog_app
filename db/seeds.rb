@@ -13,20 +13,28 @@ User.destroy_all
 Post.destroy_all
 Tag.destroy_all
 
-user = User.create!(email: "test@example.com", password: "123456")
-
-tags = %w[ruby rails dev turbo stimulus].map { |name| Tag.create!(name: name) }
+User.create!(email: "admin@example.com", password: "123456")
 
 5.times do |i|
   post = Post.create!(
-    title: "Post #{i + 1}",
-    body: "Contenido del post #{i + 1}. Lorem ipsum dolor sit amet.",
-    user: user
+    title: "Post de ejemplo #{i + 1}",
+    body: "Este es el contenido del post número #{i + 1}.",
+    user: User.first
   )
-  post.tags << tags.sample(2)
+
+  3.times do |j|
+    Comment.create!(
+      body: "Comentario #{j + 1} para el post #{i + 1}",
+      commentable: post,
+      user: User.first
+    )
+  end
+
+  ["rails", "ruby", "dev"].each do |tag_name|
+    tag = Tag.find_or_create_by!(name: tag_name)
+    post.tags << tag unless post.tags.include?(tag)
+  end
 end
 
-Post.first.comments.create!(body: "Buen post", user: user)
-Post.first.reactions.create!(kind: "like", user: user)
 
 puts "Seed completado."

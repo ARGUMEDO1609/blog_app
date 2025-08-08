@@ -1,0 +1,17 @@
+<div id="reactions_<%= dom_id(reactionable) %>" class="flex gap-3">
+  <% { "like" => "👍", "love" => "💖", "laugh" => "😂" }.each do |type, emoji| %>
+    <%= button_to reactions_path(
+          reactable_id: reactionable.id,
+          reactable_type: reactionable.class.name,
+          reaction_type: type
+        ),
+        method: :post,
+        data: { turbo_stream: true },
+        class: "flex items-center gap-1 px-2 py-1 rounded hover:bg-gray-100" do %>
+      <span><%= emoji %></span>
+      <span class="text-sm text-gray-700">
+        <%= reactionable.reactions.where(reaction_type: type).count %>
+      </span>
+    <% end %>
+  <% end %>
+</div>

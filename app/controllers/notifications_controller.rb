@@ -8,6 +8,6 @@ class NotificationsController < ApplicationController
   def update
     @notification = current_user.notifications.find(params[:id])
     @notification.update(read: true)
-    redirect_back fallback_location: notifications_path
+    redirect_to notifications_path
   end
 end

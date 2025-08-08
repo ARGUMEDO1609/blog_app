@@ -27,12 +27,14 @@
 
       <div class="flex items-center space-x-4">
         <% if user_signed_in? %>
-          <%= link_to "Notificaciones", notifications_path, class: "relative" %>
+          <!-- Suscripción en vivo al contador -->
+          <%= turbo_stream_from "notifications_count_#{current_user.id}" %>
 
-          <% unread_count = current_user.notifications.where(read: false).count %>
-          <% if unread_count > 0 %>
-            <span class="ml-1 inline-block bg-red-600 text-white text-xs px-2 py-1 rounded-full">
-              <%= unread_count %>
+          <!-- Enlace con campana y contador -->
+          <%= link_to notifications_path, class: "relative flex items-center" do %>
+            🛎
+            <span id="notifications_count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 text-xs">
+              <%= render "notifications/count", count: current_user.notifications.where(read: false).count %>
             </span>
           <% end %>
 

@@ -1,9 +1,9 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: %i[ show edit update destroy ]
+  before_action :set_post, only: %i[show edit update destroy]
 
   def index
-    @posts = Post.order(created_at: :desc).page(params[:page]).per(5) 
+    @posts = Post.order(created_at: :desc).page(params[:page]).per(5)
   end
 
   def search
@@ -17,30 +17,33 @@ class PostsController < ApplicationController
     render :index
   end
 
-  def show; end
+  def show
+  end
 
   def new
     @post = Post.new
   end
 
-  def edit; end
+  def edit
+  end
 
   def create
-    @post = current_user.posts.build(post_params.except(:tag_list))
+    @post = current_user.posts.new(post_params)
+
     if @post.save
       save_tags
-      redirect_to @post, notice: "Publicación creada."
+      redirect_to @post, notice: "Publicación creada correctamente."
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
     if @post.update(post_params.except(:tag_list))
       save_tags
-      redirect_to @post, notice: "Publicación actualizada."
+      redirect_to @post, notice: "Publicación actualizada correctamente."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -56,7 +59,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :body, :user_id)
+    params.require(:post).permit(:title, :body, :tag_list)
   end
 
   def save_tags
@@ -64,3 +67,4 @@ class PostsController < ApplicationController
     @post.tags = tags.map { |name| Tag.find_or_create_by(name: name.downcase) }
   end
 end
+

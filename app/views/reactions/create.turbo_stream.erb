@@ -1,1 +1,6 @@
-<%= turbo_stream.replace "reactions_#{dom_id(@reactable)}", partial: "reactions/controls", locals: { reactable: @reactable } %>
+<turbo-stream action="replace" target="reactions_<%= dom_id(@reaction.reactable) %>">
+  <template>
+<%= render partial: "reactions/reactions", formats: [:html], locals: { reactionable: @reaction.reactable } %>
+
+  </template>
+</turbo-stream>

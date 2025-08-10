@@ -1,6 +1,6 @@
 <div id="<%= dom_id(notification) %>" class="p-2 border-b <%= notification.read? ? 'bg-gray-100' : 'bg-blue-100' %>">
   <p><%= notification.message %></p>
   <% unless notification.read? %>
-    <%= button_to "Marcar como leída", notification_path(notification), method: :patch, class: "text-sm text-blue-600" %>
+    <%= button_to "Mark as read", notification_path(notification), method: :patch, class: "text-sm text-blue-600" %>
   <% end %>
 </div>

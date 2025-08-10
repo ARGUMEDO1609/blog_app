@@ -16,17 +16,17 @@
   </div>
 
   <div>
-    <%= f.label :body, "Contenido", class: "block font-semibold mb-1" %>
+    <%= f.label :body, "Content", class: "block font-semibold mb-1" %>
     <%= f.text_area :body, rows: 8, class: "w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-200" %>
   </div>
 
   <div>
-    <%= label_tag :tag_list, "Etiquetas (separadas por coma)", class: "block font-semibold mb-1" %>
+    <%= label_tag :tag_list, "Tags", class: "block font-semibold mb-1" %>
     <%= text_field_tag :tag_list, post.tags.map(&:name).join(", "), class: "w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-200" %>
   </div>
 
   <div>
     <%= f.submit class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow" %>
-    <%= link_to "Cancelar", posts_path, class: "ml-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow" %>
+    <%= link_to "Cancel!", posts_path, class: "ml-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow" %>
   </div>
 <% end %>

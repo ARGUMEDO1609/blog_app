@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
       if recipient != current_user
         Notification.create!(
           user: recipient,
-          notifiable: @comment, # 👈 Asociamos la notificación al comentario
+          notifiable: @comment,
           message: "#{current_user.email} comentó tu #{ @commentable.is_a?(Post) ? 'publicación' : 'comentario' }",
           read: false
         )

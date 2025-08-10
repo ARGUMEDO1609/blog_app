@@ -4,15 +4,12 @@
       <strong><%= comment.user.email %>:</strong> <%= comment.body %>
     </p>
 
-    <!-- Reacciones del comentario -->
     <%= render partial: "reactions/reactions", locals: { reactionable: comment } %>
 
-    <!-- Formulario para responder solo al primer nivel -->
     <% if comment.commentable_type == "Post" %>
       <%= render partial: "comments/form", locals: { commentable: comment } %>
     <% end %>
 
-    <!-- Comentarios anidados -->
     <div id="comments_<%= dom_id(comment) %>">
       <%= render partial: "comments/comment", collection: comment.comments, as: :comment %>
     </div>

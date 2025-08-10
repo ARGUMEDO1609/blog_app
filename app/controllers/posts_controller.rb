@@ -6,16 +6,12 @@ class PostsController < ApplicationController
     @posts = Post.order(created_at: :desc).page(params[:page]).per(5)
   end
 
-  def search
-    query = params[:q].to_s.strip.downcase
+def search
+  @posts = Post.where("title ILIKE ?", "%#{params[:q]}%")
+               .page(params[:page])
+               .per(10)
+end
 
-    @posts = Post.joins("LEFT JOIN taggings ON taggings.post_id = posts.id")
-                 .joins("LEFT JOIN tags ON tags.id = taggings.tag_id")
-                 .where("LOWER(posts.title) LIKE ? OR LOWER(tags.name) LIKE ?", "%#{query}%", "%#{query}%")
-                 .distinct
-
-    render :index
-  end
 
   def show
   end
@@ -32,7 +28,7 @@ class PostsController < ApplicationController
 
     if @post.save
       save_tags
-      redirect_to @post, notice: "Publicación creada correctamente."
+      redirect_to @post, notice: "Post created successfully."
     else
       render :new, status: :unprocessable_entity
     end
@@ -41,7 +37,7 @@ class PostsController < ApplicationController
   def update
     if @post.update(post_params.except(:tag_list))
       save_tags
-      redirect_to @post, notice: "Publicación actualizada correctamente."
+      redirect_to @post, notice: "Post updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -49,7 +45,7 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy!
-    redirect_to posts_path, notice: "Post eliminado correctamente."
+    redirect_to posts_path, notice: "Post successfully deleted."
   end
 
   private

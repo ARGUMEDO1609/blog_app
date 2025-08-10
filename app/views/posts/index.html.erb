@@ -1,12 +1,12 @@
 <div class="max-w-4xl mx-auto py-8 px-4">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold text-gray-800">Publicaciones</h1>
-    <%= link_to "Nueva publicación", new_post_path, class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow" %>
+    <%= link_to "New post!", new_post_path, class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow" %>
   </div>
 
   <%= form_with url: search_posts_path, method: :get, local: true, class: "mb-6 flex gap-2" do %>
     <%= text_field_tag :q, params[:q], placeholder: "Buscar por título o etiqueta", class: "flex-grow border border-gray-300 rounded p-2 focus:ring focus:ring-blue-200" %>
-    <%= submit_tag "Buscar", class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow" %>
+    <%= submit_tag "Search", class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow" %>
   <% end %>
 
   <% if @posts.any? %>
@@ -32,7 +32,7 @@
       <% end %>
     </div>
   <% else %>
-    <p class="text-center text-gray-500 mt-8">No se encontraron publicaciones.</p>
+    <p class="text-center text-gray-500 mt-8">No posts found.</p>
   <% end %>
 </div>
 

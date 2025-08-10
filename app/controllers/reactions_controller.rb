@@ -10,11 +10,11 @@ class ReactionsController < ApplicationController
     if @reaction.save
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_back fallback_location: root_path, notice: "Reacción registrada." }
+        format.html { redirect_back fallback_location: root_path, notice: "Reaction recorded." }
       end
     else
       respond_to do |format|
-        format.html { redirect_back fallback_location: root_path, alert: "No se pudo registrar la reacción." }
+        format.html { redirect_back fallback_location: root_path, alert: "The reaction could not be recorded." }
       end
     end
   end

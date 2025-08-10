@@ -19,18 +19,15 @@
   </head>
 
   <body>
-    <!-- Navegación -->
     <nav class="p-4 bg-gray-800 text-white flex justify-between items-center">
       <div>
-        <%= link_to "BLOG DE PREGUNTAS", root_path, class: "font-bold text-xl" %>
+        <%= link_to "QUESTIONS BLOG", root_path, class: "font-bold text-xl" %>
       </div>
 
       <div class="flex items-center space-x-4">
         <% if user_signed_in? %>
-          <!-- Suscripción en vivo al contador -->
           <%= turbo_stream_from "notifications_count_#{current_user.id}" %>
 
-          <!-- Enlace con campana y contador -->
           <%= link_to notifications_path, class: "relative flex items-center" do %>
             🛎
             <span id="notifications_count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 text-xs">
@@ -38,20 +35,18 @@
             </span>
           <% end %>
 
-          <%= button_to "Cerrar sesión", destroy_user_session_path,
+          <%= button_to "Log out", destroy_user_session_path,
                         method: :delete,
                         class: "bg-red-500 text-white px-4 py-2 rounded" %>
         <% else %>
-          <%= link_to "Iniciar sesión", new_user_session_path, class: "ml-4" %>
-          <%= link_to "Registrarse", new_user_registration_path, class: "ml-4" %>
+          <%= link_to "Login", new_user_session_path, class: "ml-4" %>
+          <%= link_to "Register", new_user_registration_path, class: "ml-4" %>
         <% end %>
       </div>
     </nav>
-
-    <!-- Mensajes flash -->
     <% if notice %>
       <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative m-4">
-        <strong class="font-bold">¡Éxito!</strong>
+        <strong class="font-bold">¡Welcome!</strong>
         <span class="block sm:inline"><%= notice %></span>
       </div>
     <% end %>
@@ -62,8 +57,6 @@
         <span class="block sm:inline"><%= alert %></span>
       </div>
     <% end %>
-
-    <!-- Contenido principal -->
     <main class="container mx-auto mt-8 px-5">
       <%= yield %>
     </main>
